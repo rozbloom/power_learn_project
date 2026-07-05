@@ -1,52 +1,53 @@
-# Savannah Adventure Quiz: Reasoning Beyond the Thicket
-**Course:** Power Learn Project  
-**Topic:** Advanced Prompt Engineering in Health Tech  
+## Savannah Adventure Quiz — Answers
+
+### 1. Kale in Kakamega: MAP Framework Failure Analysis
+
+**Where it broke down:**
+- **Memory failure:** The AI had no continuity — it didn't recall the user's region from earlier in the conversation, so it treated every user as a blank slate rather than someone already anchored to Kakamega County.
+- **Assets failure (the core problem):** The AI wasn't given any real data about what grows or sells locally. "Leafy greens" defaulted to kale because that's the dominant example in the AI's training data (a heavily Western/urban-market vegetable), not because kale is what's actually in Kakamega's markets.
+- **Prompt/Actions failure:** No tool was invoked to check local food availability. A live lookup — even a simple crop-calendar or market-price API call — would have caught the mismatch before the message was sent.
+
+**Redesigned prompt (MAP-anchored):**
+> "You are a Community Nutrition Advisor. Memory: recall the user's stated county (Kakamega) from earlier in this conversation. Assets: use the attached local-crop data sheet for Western Kenya, which lists managu (African nightshade), terere (amaranth), and sukuma wiki (collard greens) as the dominant leafy vegetables grown and sold in Kakamega markets — not kale. Prompt/Actions: before naming a vegetable, call the crop-availability tool to confirm it's in season this month in Kakamega. Then recommend ONE locally available leafy green, in ≤160 characters, with no assumption of urban supermarket access."
+
+This forces every recommendation through a real-data gate instead of a training-data default.
 
 ---
 
-## 1. The Kakamega Kale Failure (MAP Framework)
-**The Failure:** This is a failure of **Assets (A)** and **Grounding**. The AI relied on its general training data (which says kale is healthy) but lacked the specific "Asset" of a local food availability map for Kakamega County. Without this context, the AI "hallucinated" that kale was a viable option for the user.
+### 2. Panic Over Abdominal Pain: Rebuilding with the Verifier Pattern
 
-**Redesigned Prompt (MAP):**
-> "Using the **Local Food Availability Database (Asset)** for Kakamega County, identify the top 3 iron-rich leafy greens currently in season. **Memory:** The user is a mother in a rural household with no refrigeration. **Prompt:** Suggest a meal using these local greens (e.g., *mshicha* or *managu*) that can be prepared using traditional cooking methods."
+The original prompt jumped straight to an action ("visit your doctor immediately") without ever confirming what the AI actually understood — a classic case of acting before verifying.
 
----
+**Verifier Pattern rebuild:**
+> "You are a maternal triage assistant. Before generating any advice, ask the user one clarifying question to narrow the symptom (e.g., 'Is the pain constant or does it come and go?'). Then ask a second question only if needed to gauge severity (e.g., 'Is there any bleeding with it?'). Restate what you understood in one plain sentence and ask 'Did I get that right?' Only after the user confirms should you classify severity and give exactly one action. If the pain is mild/intermittent with no danger signs, do not default to 'go to the clinic' — instead give a monitoring instruction plus a clear trigger for when to seek help (e.g., 'if pain becomes constant or you see bleeding, contact your CHW today')."
 
-## 2. The Abdominal Pain Panic (Verifier Pattern)
-**The Concept:** The **Verifier Pattern** forces the AI to stop and check its assumptions before giving a high-stakes answer. It prevents "alarmist" advice by requiring more data first.
-
-**Redesigned Prompt (Verifier Pattern):**
-> "If a user reports abdominal pain, **DO NOT** immediately advise a clinic visit. Instead, follow this protocol:
-> 1. **Clarify:** Ask the user: 'Is the pain sharp or dull? Is it accompanied by bleeding or fever?'
-> 2. **Verify:** Based on their answer, check if the symptoms match the 'Emergency Red Flag' list.
-> 3. **Action:** Only if a Red Flag is present, advise immediate transport. Otherwise, provide comfort measures and ask them to monitor for specific changes."
+**Why this matters here specifically:** the panic wasn't caused by bad medical logic — it was caused by the AI treating "immediately go to a clinic" as the only possible instruction regardless of severity, ignoring that transport cost is itself a barrier. Clarifying questions let the AI distinguish "mild, watch-and-wait" from "danger sign, act now" *before* committing to an action that many users literally cannot afford to follow.
 
 ---
 
-## 3. WHO Guidelines vs. Chain-of-Thought (CoT)
-**The Justification:** Direct summarization of WHO guidelines is often too academic and "urban-centric." **Chain-of-Thought (CoT)** creates more value because it "reasons" through the implementation.
-*   **WHO Summary:** "Exclusive breastfeeding is recommended for 6 months." (Fact)
-*   **CoT Adaptation:** "WHO recommends 6 months of breastfeeding. *However*, in rural East Africa, mothers often return to farm work early. *Therefore*, we should provide a schedule for expressing milk and storage tips using traditional cooling pots (*pod pots*) to make the guideline achievable."
-**Value:** CoT turns a "what" (the guideline) into a "how" (the local solution).
+### 3. Why Chain-of-Thought Localization Beats Verbatim WHO Summarization
+
+Summarizing WHO guidelines verbatim gives you *accuracy at the global level* but *zero relevance at the point of use*. WHO guidelines are written for health systems that assume things rural East Africa often doesn't have: refrigeration, daily clinic access, formula availability, diverse diets, stable mobile connectivity for follow-up. A verbatim summary either overwhelms an SMS user with clinical language or gives advice that's technically correct but practically impossible to act on.
+
+Chain-of-Thought adaptation adds value because it makes the *reasoning steps* — not just the conclusion — visible and adjustable for local constraints:
+1. State the WHO guideline.
+2. Reason about which local constraint might block it (cost, distance, food availability, literacy).
+3. Adapt the recommendation to something achievable within that constraint, without contradicting the underlying medical intent.
+
+This is the difference between "exclusively breastfeed for 6 months" (WHO verbatim — true but assumes no return-to-work pressure) and a CoT-adapted version that reasons through what support a mother without maternity leave actually needs, then gives an achievable version of the same medical goal. The value isn't a better summary — it's translating global evidence into something a specific person can actually do, which is the entire premise of hyper-localization.
 
 ---
 
-## 4. The Outdated Data Catch (OCEAN Framework)
-**The Concept:** The **OCEAN Framework** is a quality-control checklist used to evaluate AI output for "taste" and "truth."
-*   **O - Originality:** Does this sound like a generic bot or a local expert?
-*   **C - Concrete Details:** Are the numbers specific and cited?
-*   **E - Evident Logic:** Does the math/logic hold up?
-*   **A - Assertive Direction:** Is the advice clear?
-*   **N - Narrative:** Does it tell a consistent story?
+### 4. Catching the Stale Doctor-Ratio Statistic with OCEAN
 
-**How it catches the error:** Under **Concrete Details (C)** and **Evident Logic (E)**, the OCEAN framework requires you to verify any "hard facts" against a trusted source. By checking the "Concrete" claim of 1.8 doctors against the latest 2025 Ministry of Health data, you would see the "Evident" contradiction and catch the hallucination before it reaches donors.
+Applying OCEAN to "Kenya has 1.8 doctors per 10,000 people" before it reaches donors:
+
+- **Originality:** A red flag on its own — 1.8/10,000 is a widely recycled figure (it traces back to a 2014 WHO estimate) that AI models tend to reproduce because it's common in training data, not because it's current. A recycled number should trigger a freshness check.
+- **Concrete evidence:** Ask for the source and date. When I checked current sources, figures vary wildly depending on methodology and year — a 2022 World Bank estimate implies roughly 1/10,000, Statista cites 19 registered medical officers per 100,000 (≈1.9/10,000) for 2022, and a 2017/18 fact-check calculated one doctor per 6,355 people (≈1.6/10,000) versus a disputed government claim of 1:16,000. None of these cleanly confirms either "1.8" or "0.9" — which itself is the finding: this statistic is contested and stale across the board, not a single settled number.
+- **Evidentiary chain:** Does the report show *how* the number was derived (registered doctors ÷ population, which year's population estimate)? If that chain isn't visible, the number can't be verified — only repeated.
+- **Assertive stance:** Flag any report presenting one figure with false confidence. Given how much these numbers vary by source and year, a defensible donor report should state a range with citation and year, not a single bare number.
+- **Narrative coherence:** Cross-check against other figures in the same report — e.g., does a 1.8/10,000 doctor density line up with claimed CHW ratios and facility-access numbers elsewhere in the document, or does it contradict them?
+
+The catch here isn't "the AI got the exact number wrong" — it's that **OCEAN forces you to ask for the source and year before publishing any statistic**, which would have surfaced that this specific figure is genuinely disputed territory rather than a stable fact, well before it reached a donor.
 
 ---
-
-## Summary of Key Concepts
-| Framework | Purpose |
-| :--- | :--- |
-| **MAP** | Anchors AI in real-world resources (Assets) and history (Memory). |
-| **Verifier Pattern** | Prevents dangerous or panicky advice by forcing a "double-check" step. |
-| **Chain-of-Thought** | Breaks down complex rules into local, step-by-step actions. |
-| **OCEAN** | A final quality-control filter to ensure data is fresh, concrete, and logical. |

@@ -8,7 +8,7 @@
 **The Failure:** This is a failure of **Discernment** and **Description**. The AI lacked the discernment to recognize that "snowmelt" is an inappropriate concept for the arid climate of Turkana. Furthermore, the prompt lacked a specific description (Product/Process/Performance) that grounded the AI in local ecology.
 
 **Redesigned Prompt:**
-> "You are a Science Tutor for a student in Turkana County, Kenya. **Description:** Explain how plants get water in arid environments. **Process:** Use local examples like the acacia tree's deep taproots or seasonal riverbeds (luggas). **Performance:** Keep the language simple and relatable to a pastoralist community. **Discernment:** Do not use examples involving snow, winter, or heavy rainfall."
+> "You are a Science Tutor for a student in Turkana County, Kenya. **Description (Product):** Explain how plants get water in arid environments. **Description (Process):** Use local examples like the acacia tree's deep taproots or seasonal riverbeds (luggas). **Description (Performance):** Keep the language simple and relatable to a pastoralist community. **Discernment:** Do not use examples involving snow, winter, or heavy rainfall — if the model's training data defaults to a temperate-climate explanation, this instruction forces a check against the student's actual environment before responding."
 
 ---
 
@@ -23,12 +23,15 @@
 ---
 
 ## 3. Automation vs. Augmentation (Co-Pilot Approach)
-**The Justification:** Operating at the **Automation** level (where AI generates static quizzes without human input) creates a rigid system that cannot adapt to student struggles. 
+>"Operating at the Automation level (where AI generates static quizzes without human input) creates a rigid system that cannot adapt to student struggles.
 
-Operating at the **Augmentation** level (the "co-pilot" approach) builds better learning outcomes because it combines the speed of AI with the empathy and context of a human teacher. 
-*   The AI can rapidly generate 10 variations of a math problem.
-*   The human teacher uses their **Discernment** to select the variation that best fits the current classroom mood or recent struggles.
-*   The AI then iterates based on the teacher's feedback. This creates a dynamic, responsive learning environment rather than a static, one-size-fits-all test.
+Operating at the Augmentation level (the 'co-pilot' approach) builds better learning outcomes because it combines the speed of AI with the empathy and context of a human teacher.
+
+* The AI can rapidly generate 10 variations of a math problem.
+* The human teacher uses their Discernment to select the variation that best fits the current classroom mood or recent struggles.
+* The AI then iterates based on the teacher's feedback.
+
+**Critically, this creates a compounding effect over time: each round of teacher feedback doesn't just fix one quiz, it recalibrates the AI's understanding of that specific classroom's needs, so next week's variants start from a better baseline than this week's.** This is what separates a true thinking partner from a static tool — the system gets smarter about *this* classroom rather than staying generic. The result is a dynamic, responsive learning environment rather than a static, one-size-fits-all test."
 
 ---
 

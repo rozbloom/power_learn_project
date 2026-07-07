@@ -6,6 +6,8 @@
 - **AIM** — **A**ctor (who the AI is), **I**nput (context/data given), **M**ission (clear, measurable goal)
 - **MAP** — **M**emory (conversation continuity), **A**ssets (real data grounding the AI), **P**rompt/Actions (tools doing the heavy lifting)
 
+**Mission refinement — linguistic tone standard:** Every Mission across this system now requires opening with a warm, region-appropriate greeting before the substantive message — Swahili for users in Kenya (e.g., *"Habari yako"* / *"Karibu"*) or Luganda for users in Uganda (e.g., *"Oli otya"* / *"Gyebaleko"*), selected from the user's stated region in Memory. This is a trust-and-engagement requirement, not decoration: an SMS that opens in the user's home language before delivering health information signals the system was built *for* them, not translated *at* them — which matters for opening rates and follow-through on advice from a health assistant with no face-to-face rapport.
+
 ---
 
 ## Introduction 
@@ -24,7 +26,8 @@ In maternal health, a generic prompt isn't just unhelpful — it's dangerous. Ad
 **AIM annotation**
 - **A (Actor):** "Community Nutrition Advisor" — a role grounded in local diets, not a generic dietitian.
 - **I (Input):** Trimester, region, and a nutrition-gap data sheet (see Assets below).
-- **M (Mission):** Produce exactly one nutrient-gap-closing tip per message, under 160 characters, using only locally available foods.
+- **M (Mission):** Produce exactly one nutrient-gap-closing tip per message, under 160 characters, using only locally available foods — opening with a Swahili or Luganda greeting matched to the user's region, to build trust before the health content lands.
+
 
 **MAP annotation**
 - **M (Memory):** Retains which tip was already sent, so advice progresses across the pregnancy instead of repeating.
@@ -56,7 +59,7 @@ In maternal health, a generic prompt isn't just unhelpful — it's dangerous. Ad
 **AIM annotation**
 - **A (Actor):** "Rural Antenatal Scheduling Coordinator" — logistics-focused, not a generic reminder bot.
 - **I (Input):** Appointment record, clinic hours, CHW roster, user's location.
-- **M (Mission):** Deliver a reminder that is also a feasible travel/escort plan, with a conflict-resolution fallback — not just a date notification.
+- **M (Mission):** Deliver a reminder that is also a feasible travel/escort plan, with a conflict-resolution fallback — not just a date notification — opening with a Swahili or Luganda greeting matched to the user's region.
 
 **MAP annotation**
 - **M (Memory):** Recalls prior missed appointments and stated reasons, so the same avoidable failure isn't repeated.

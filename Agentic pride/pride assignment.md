@@ -1,78 +1,91 @@
-## Pride Leader Blueprint: AgriPride Autonomous Ecosystem
+# AgriPride — Autonomous Agent Pride for Smallholder Coffee & Maize Farmers (Uganda / Rwanda)
 
-**Organization:** AgriPride 
-**Role:** Chief AI Officer 
-**Date:** May 17, 2026
+## Introduction
 
----
+AgriPride's original all-in-one agent failed because it tried to act as pricing analyst, dispatcher, and advisor at the same time. This led to contradictory advice and truck bookings with no verification.
 
-### Introduction
+A better approach is to orchestrate a specialized agent pride:
+- **Scout** for market intelligence
+- **Guardian** for logistics coordination
+- **Hunter** for human-in-loop liaison
 
-Solo AI tools in agritech often fail by treating farmers as data points rather than partners. Agent orchestration transcends this by simulating a "pride" of specialists. This ensures that market intelligence, logistics, and human oversight move in synchronized harmony, converting chaotic data into a dignified, resilient harvest economy.
-
----
-
-### Agent 1: The Scout (Market Intelligence)
-
-The Scout serves as the ecosystem’s eyes, scanning the Rwanda Agricultural Board (RAB) API and local market indices to protect farmer margins.
-
-* **RANK Framework (Autonomy Calibration):**
-* **Role:** Price Advisor & Trend Analyst.
-* **Authority:** Provides advice only; strictly forbidden from executing sales without a verified biometric or USSD signature from the farmer.
-* **Notification:** Must alert the human "Pride Leader" if market volatility exceeds a **20% swing** within 4 hours.
-* **Kill Switch:** Immediate suspension via USSD code ***#700#** if the agent begins broadcasting erroneous price spikes.
-
-
-* **Safety & Evolution:**
-* **GUARD Rail:** Immutable filter to block any pricing variations based on the farmer's gender or tribal affiliation (Bias Mitigation).
-* **CYCLE Engine:** **Capture** Logs the delta between "Advised Price" and "Actual Realized Sale Price" to tune future accuracy.
-* **Specialized Tool:** **n8n** for connecting real-time market APIs to the internal ecosystem.
-
-
+This structure replaces guesswork with calibrated autonomy, embedded safety, and human sovereignty at every critical decision.
 
 ---
 
-### Agent 2: The Guardian (Logistics Coordinator)
+## Agent 1: Scout Agent — Market Intelligence · RANK Framework
 
-The Guardian manages the physical movement of crops, ensuring that the "prey" (the harvest) reaches the market safely.
+### Role
+- Price advisor only.
+- Recommends sell/hold timing using Rwanda Agricultural Board API and Uganda commodity exchange feeds.
+- Never executes a sale or contract itself.
 
-* **TRAIL Framework (Memory Architecture):**
-* **Transient:** Stores current trip coordinates and truck ID only for the duration of the active transit.
-* **Relational:** Remembers specific farm gate locations and past "loading speed" preferences (Opt-in only).
-* **Archival:** Aggregates anonymized "Route Success Rates" to predict which roads become impassable during the rainy season.
-* **Inheritance:** Passes "Verified Road Conditions" to the Hunter Agent to prevent unrealistic delivery promises.
-* **Land Rights:** All data shards are hosted on **AWS Africa (Cape Town)**, ensuring strict compliance with the Uganda Data Protection Act.
+### Authority
+- Maximum **3 SMS/day per farmer**.
+- May never override the farmer's final decision.
+- Advice is always framed as a recommendation, not an instruction.
 
+### Notification
+- Auto-escalates to **Guardian Agent** and flags a human market analyst if price volatility exceeds **20% within 24 hours**.
 
-* **Safety & Evolution:**
-* **GUARD Rail:** Anomaly detection that flags and halts a booking if a logistics provider’s "Success Rate" drops below 70%.
-* **CYCLE Engine:** **Yield Insights**—Weekly analysis of "Route Delay Patterns" to automatically suggest earlier departure times.
-* **Specialized Tool:** **LangGraph** for visualizing and managing the complex state of a truck's journey from farm to warehouse.
+### Kill Switch
+- **USSD `*#700#`** immediately pauses Scout.
+- Returns the farmer to manual, unassisted decision-making.
+- Works without a smartphone.
 
-
-
----
-
-### Agent 3: The Hunter (Human-in-the-Loop Liaison)
-
-The Hunter is the closer. It synthesizes the work of the Scout and Guardian to present the human manager with a high-probability execution plan.
-
-* **HUNT Protocol (Multi-Agent Orchestration):**
-* **Handoff:** Triggered when the Scout confirms a buyer contract **>500kg**. The Scout passes the [Volume] and [Deadline] to the Guardian.
-* **Unified Context:** Maintains a shared "Tactical Dashboard" where both Price and Logistics feasibility are visible simultaneously.
-* **Negotiation:** If the Guardian’s logistics cost consumes **>25%** of the Scout’s negotiated price, the Hunter pauses the workflow for human review.
-* **Termination:** Workflow closes only when the digital "Goods Received Note" is signed by the buyer and the farmer receives a payment confirmation.
-
-
-* **Safety & Evolution:**
-* **GUARD Rail:** **Audit Trail**—Logs the full "Reasoning Chain" of every contract, allowing a human to see *why* a specific buyer was chosen.
-* **CYCLE Engine:** **Loop Validation**—The agent cannot update its "Negotiation Logic" without a human manager approving the change via a Slack/WhatsApp prompt.
-* **Specialized Tool:** **CrewAI** to manage the "Manager-Agent" relationship and resolve conflicts between pricing and logistics goals.
-
-
+### RANK Elementsa
+- **GUARD**: Guardrail — block any price recommendation that uses ethnic, tribal, or regional proxies as inputs. (Dignity Preservation filter)
+- **CYCLE**: Capture — log SMS delivery/response rate and the percentage of farmers who followed vs. ignored each price recommendation.
+- **TOOL**: `n8n` — low-code automation linking commodity-price APIs to the SMS/USSD gateway across shaky rural connectivity.
 
 ---
 
-### Reflection: Preserving Human Sovereignty
+## Agent 2: Guardian Agent — Logistics Coordinator · TRAIL Framework
 
-Human sovereignty is preserved not by doing the work, but by **defining the boundaries** within which the work happens. Through the **RANK** and **HUNT** frameworks, we ensure the AI pride never operates in a vacuum. The human remains the "Pride Leader" who sets the seasonal strategy and holds the "Kill Switch." By architecting "Pause Points" where agents must wait for human validation before high-stakes financial execution, we ensure technology serves as a tool for empowerment rather than a system of automated displacement. We command the pride; we do not let the pride command the village.
+### Data Handling
+- **Transient**: Holds only the active booking's truck ID, route, and ETA; discarded once delivery closes.
+- **Relational**: Farm GPS location is opt-in, shown to the farmer at signup, and revocable at any time without losing the SMS price service.
+- **Archival**: Stores anonymized, district-level route success and delay rates. No farmer names, phone numbers, or plot IDs are retained.
+- **Inheritance**: Passes verified road-condition and truck-availability data to Hunter only after a contract is confirmed.
+
+### Land Rights
+- All records are held in **AWS Africa (Cape Town)**.
+- Satisfies Uganda's **Data Protection Act 2022** localization requirement.
+
+### RANK Elements
+- **GUARD**: Guardrail — a truck may never be dispatched until a local CHW-style field contact confirms current road conditions; this closes the prototype's unverified-booking failure.
+- **CYCLE**: Yield Insights — Sunday 2AM EAT review of delayed-delivery percentage, split by road condition vs. truck-availability cause.
+- **TOOL**: `CrewAI` — role-based coordination so Guardian and Hunter negotiate truck confirmation without conflicting instructions.
+
+---
+
+## Agent 3: Hunter Agent — Human-in-Loop Liaison · HUNT Protocol
+
+### Workflow
+- **Handoff Trigger**: When Scout secures a buyer contract over **500kg**, Hunter auto-alerts Guardian with destination, volume, and deadline.
+- **Unified Context**: A single shared real-time dashboard is visible to Scout, Guardian, Hunter, and the human logistics manager.
+- No agent works from a stale or private copy of the data.
+
+### Rules
+- **Negotiation Rules**: If freight cost exceeds **30% of the contract price**, Hunter halts and escalates to the human logistics manager before any booking proceeds.
+- **Termination**: The workflow closes only once the human logistics manager signs off on the delivery confirmation, not on truck departure alone.
+
+### RANK Elements
+- **GUARD**: Audit Trail — an immutable log of every handoff, including the counterfactual of what would have happened absent the human check-in.
+- **CYCLE**: Explain — a weekly plain-language report to the logistics manager and farmers summarizing what changed in the workflow and why.
+- **TOOL**: `LangGraph` — visual mapping of the Scout → Guardian → Hunter handoff so managers can audit the workflow at a glance.
+
+---
+
+## Reflection: Preserving Human Sovereignty
+
+Full autonomy never means unchecked autonomy.
+
+- Each agent's **RANK boundaries** stop it at the edge of its role.
+- Every farmer keeps a **USSD kill switch** independent of literacy or smartphone access.
+- Guardian cannot dispatch a truck without human-sourced road verification.
+- Hunter cannot close a workflow without the logistics manager's sign-off.
+
+Autonomy speeds up the pride's work, but final authority on money, transport, and land rights stays with people.
+
+Opt-in memory and immutable audit trails make every decision reversible and visible.
